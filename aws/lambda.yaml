@@ -1,0 +1,167 @@
+AWSTemplateFormatEversion: '2010-09-09'
+Description: 'CloudFormation template for lambda resources'
+
+Parameters:
+  # Add parameters for cross-stack references if needed
+
+  Resources:
+  LambdaFunctionArticleFavoriteServiceDev:
+    Type: "Amazon.Lambda"
+    Properties:
+      FunctionName: "django-rest-pet-clinic-article-favorite-service-dev"
+      Reole: "arn:aws:iam::661572124387:role/django-rest-pet-clinic-lambda-execution-role-dev"
+      Runtime: "python3.9"
+      Handler: "lambda_function.lambda_handler"
+      Timeout: 10
+      MemorySize: 128
+      Environment:
+        Variables:
+          JWT_SECRET: "secure-jwt-secret-to-be-replaced"
+          USERS_TABLE: "Users"
+         ARTICLES_TABLE: "Articles"
+         FAVORIT_TABLE:"ArticleFavorites"
+      TracingConfig:
+        Mode: "PassThrough"
+      LoggingConfig:
+        LogGroup: "/aws/lambda/django-rest-pet-clinic-article-favorite-service-dev"
+      PackageType: "Zip"
+      Architectures:
+        -x86_64"
+      EphemeralStorage:
+        Size: 512
+    LambdaFunctionAuthenticationServiceDev:
+    Type: "Amazon.Lambda"
+    Properties:
+      FunctionName: "django-rest-pet-clinic-authentication-service-dev"
+      Role: "arn:aws:iam::661572124387:role/django-rest-pet-clinic-lambda-execution-role-dev"
+      Runtime: "python3.9"
+      Handler: "lambda_function.lambda_handler"
+      Timeout: 10
+      MemorySize: 128
+      Environment:
+        Variables:
+          JWT_SECRET : "secure-jwt-secret-to-be-replaced"
+          USERS_TABLE: "Users"
+         PROFILES_TABLE: "Profiles"
+      TracingConfig:
+        Mode: "PassThrough"
+      LoggingConfig:
+        LogGroup: "/aws/lambda/django-rest-pet-clinic-authentication-service-dev"
+      PackageType: "Zip"
+      Architectures:
+        -x86_64
+      EphemeralStorage:
+        Size: 512
+    LambdaFunctionCommentServiceDev:
+    Type: "Amazon.Lambda"
+    Properties:
+      FunctionName: "django-rest-pet-clinic-comment-service-dev"
+      Role: "arn:aws:iam::661572124387:role/django-rest-pet-clinic-lambda-execution-role-dev"
+      Runtime: "python3.9"
+      Handler: "lambda_function.lambda_handler"
+      Timeout: 10
+      MemorySize: 128
+      Environment:
+        Variables:
+          JWT_SECRET: "secure-jwt-secret-to-be-replaced"
+          ARTICLES_TABLE: "Articles"
+         COMMENTS_TABLE: "Comments"
+         PROFILES_TABLE: "Profiles"
+      TracingConfig:
+        Mode: "PassThrough"
+      LoggingConfig:
+        LogGroup: "/aws/lambda/django-rest-pet-clinic-comment-service-dev"
+      PackageType: "Zip"
+      Architectures:
+        -x86_64"
+      EphemeralStorage:
+        Size: 512
+    LambdaFunctionTagServiceDev:
+    Type: "Amazon.Lambda"
+    Properties:
+      FunctionName: "django-rest-pet-clinic-tag-service-dev"
+      Role: "arn:aws:iam::661572124387:role/django-rest-pet-clinic-lambda-execution-role-dev"
+      Runtime: "python3.9"
+      Handler: "lambda_function.lambda_handler"
+      Timeout: 10
+      MemorySize: 128
+      Environment:
+        Variables:
+          TAGS_TABLE: "Tags"
+      TracingConfig:
+        Mode: "PassThrough"
+      LoggingConfig:
+        LogGroup: "/aws/lambda/django-rest-pet-clinic-tag-service-dev"
+      PackageType: "Zip"
+      Architectures:
+        -x86_64
+      EphemeralStorage:
+        Size: 512
+    LambdaFunctionArticleFeedServiceDev:
+    Type: "Amazon.Lambda"
+    Properties:
+      FunctionName: "django-rest-pet-clinic-article-feed-service-dev"
+      Role: "arn:aws:iam::661572124387:role/django-rest-pet-clinic-lambda-execution-role-dev"
+      Runtime: "python3.9"
+      Handler: "lambda_function.lambda_handler"
+      Timeout: 10
+      MemorySize: 128
+      Environment:
+        Variables:
+          JWT_SECRET: "secure-jwt-secret-to-be-replaced"
+          USERS_TABLE: "Users"
+         ARTICLES_TABLE: "Articles"
+         PROFILES_TABLE: "Profiles"
+         FOLL_TABLE:"Follows"
+      TracingConfig:
+        Mode: "PassThrough"
+      LoggingConfig:
+        LogGroup: "/aws/lambda/django-rest-pet-clinic-article-feed-service-dev"
+      PackageType: "Zip"
+      Architectures:
+        -x86_64
+      EphemeralStorage:
+        Size: 512
+
+  LambdaFunctionArticleServiceDev:
+    Type: "Amazon.Lambda"
+    Properties:
+      FunctionName: "django-rest-pet-clinic-article-service-dev"
+      Role: "arn:aws:iam::661572124387:role/django-rest-pet-clinic-lambda-execution-role-dev"
+      Runtime: "python3.9"
+      Handler: "lambda_function.lambda_handler"
+      Timeout: 10
+      MemorySize: 128
+      Environment:
+        Variables:
+          JWT_SECRET: "secure-jwt-secret-to-be-replaced"
+          USERS_TABLE: "Users"
+         ARTICLES_TABLE: "Articles"
+         FAVORIT_TABLE:"ArticleFavorites"
+      TracingConfig:
+        Mode: "PassThrough"
+      LoggingConfig:
+        LogGroup: "/aws/lambda/django-rest-pet-clinic-article-service-dev"
+      PackageType: "Zip"
+      Architectures:
+        -x86_64"
+      EphemeralStorage:
+        Size: 512
+
+Outputs:
+  LambdaFunctionArticleFavoriteServiceDevArn: 
+    Value: "arn:aws:lambda:us-east-1:founction:django-rest-pet-clinic-article-favorite-service-dev"
+    Export: "LambdaFunctionArticleFavoriteServiceDevArn"
+  LambdaFunctionAuthenticationServiceDevArn:
+    Value: "arn:aws:lambda:us-east-1:function:django-rest-pet-clinic-authentication-service-dev"
+    Export: "LambdaFunctionAuthenticationServiceDevArn"
+  LambdaFunctionCommentServiceDevArn:
+    Value: "arn:aws:lambda:us-east-1:function:django-rest-pet-clinic-comment-service-dev"
+    Export: "LambdaFunctionCommentServiceDevArn"
+  LambdaFunctionTagServiceDevArn:
+    Value: "arn:aws:lambda:us-east-1:function:django-rest-pet-clinic-tag-service-dev"
+    Export: "LambdaFunctionTagServiceDevArn"
+  LambdaFunctionArticleFeedServiceDevArn:
+    Value: "arn:aws:lambda:us-east-1:function:django-rest-pet-clinic-article-feed-service-dev"
+    Export: "LambdaFunctionArticleFeedServiceDevArn
+", "bbanch": "migration-013"}
