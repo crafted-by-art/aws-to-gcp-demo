@@ -1,0 +1,37 @@
+AWSTemplateFormatEversion: '2010-09-07
+Description: 'CloudFormation template for s3 buckets'
+
+Resources:
+  CFTemplatesMsyiefxlfxz5-UsEast1:
+    Type: AWS:S3::Bucket
+    Properties:
+      BucketName: cf-templates-msyiefxlfxz5-us-east-1
+      VersioningConfiguration:
+        Status: Enabled
+      ServerSideEncryptionConfiguration:
+        Rules:
+          - ApplyServerSideEncryptionByDefault:
+            SSEAlgorithm: AES256
+            BucketKeyEnabled: false
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        RestrictPublicBuckets: true
+
+   DjangoRestPetClinicLambdadeploymentsDev661572124387:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: django-rest-pet-clinic-lambda-deployments-dev-661572124387
+      VersioningConfiguration:
+        Status: Enabled
+      ServerSideEncryptionConfiguration:
+        Rules:
+          - ApplyServerSideEncryptionByDefault:
+             SSEAlgorithm: AES256
+              BucketKeyEnabled: false
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        RestrictPublicBuckets: true
