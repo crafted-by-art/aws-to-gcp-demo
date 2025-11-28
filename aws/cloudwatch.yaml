@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template for cloudwatch resources'
+
+Parameters:
+  # No parameters required for this service
+
+Resources:
+  CloudWatchLogGroupLambdaArticle:
+    Type: "AWS::LOGS::LogGroup"
+    Properties:
+      LogGroupName: /aws/lambda/django-rest-pet-clinic-article-service-dev
+      LogGroupClass: STANDARD
+    LogGroupAuthentication:
+      Type: "AWS::LOGS::LogGroup"
+      Properties:
+        LogGroupName: /aws/lambda/django-rest-pet-clinic-authentication-service-dev
+        LogGroupClass: STANDARD
+    LogGroupTag:
+      Type: AW::LOGS::LogGroup
+      Properties:
+        LogGroupName: /aws/lambda/django-rest-pet-clinic-tag-service-dev
+        LogGroupClass: STANDARD
+
+Outputs:
+  LambdaArticleLogGroupArn:
+    Value: {Ref: CloudWatchLogGroupLambdaArticle.Arn:}
+    Emport: CloudWatchLogGroupLambdaArticleArn
+  AuthServiceLogGroupArn:
+    Value: {Ref: CloudWatchLogGroupAuthentication.Arn:}
+    Emport: CloudWatchLogGroupAuthenticationArn
+  TagServiceLogGroupArn:
+    Value: {Ref: CloudWatchLogGroupTag.Arn}
+    Emport: CloudWatchLogGroupTagArn
