@@ -1,0 +1,88 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template for VPC resources'
+
+Resources: 
+  DefaultVPC:
+    Type: 'AWS::EC2:VPC'
+    Properties:
+      CidrBlock: '172.31.0.0/16'
+      IsDefault: true
+      DropOptionsId: 'dopt-cdb288b7'
+      Tags: []
+
+  Subnet1:
+    Type: AWS::EC2:Subnet
+    Properties:
+      VpcId: {Ref: DefaultVPC}
+      CidrBlock: '172.31.32.0/20'
+      AvailabilityZone: 'us-east-1a'
+      DefaultForAZ: true
+      MapPublicIpOnLaunch: true
+
+  Subnet2:
+    Type: AWS::EC2:Subnet
+    Properties:
+      VpcId: {Ref: DefaultVPC}
+      CidrBlock: '172.31.0.0/20'
+      AvailabilityZone: 'us-east-1b'
+      DefaultForAZ: true
+      MapPublicIponLaunch: true
+
+  Subnet3:
+    Type: AWS::EC2:Subnet
+    Properties:
+      VpcId: {Ref: DefaultVPC}
+      CidrBlock: '172.31.80.0/20'
+      AvailabilityZone: 'us-east-1c'
+      DefaultForAZ: true
+      MapPublicIponLaunch: true
+
+  Subnet4
+    Type: AWS::EC2:Subnet
+    Properties:
+      VpcId: {Ref: DefaultVPC}
+      CidrBlock: '172.31.16.0/20'
+      AvailabilityZone: 'us-east-1d'
+      DefaultForAZ: true
+      MapPublicIpOnLaunch: true
+
+  RouteTable:
+    Type: AWS::EC2:RouteTable
+    Properties:
+      VpcId: {Ref: DefaultVPC}
+      Routes: 
+        - DestinationCidrBlock: '172.31.0.0/16'
+          GatewayId: 'local'
+        - DestinationCidrBlock: '0.0.0.0/0'
+          GatewayId: 'igw-b8529ec2'
+
+  InternetGateway:
+    Type: AWS::EC2:InternetGateway
+    Properties:
+      Tags: []
+
+  SecurityGroup:
+    Type: AWS::EC2:SecurityGroup
+    Properties:
+      GroupName: 'default'
+      Description: 'default VPC security group'
+      VpcId: {Ref: DefaultVPC}
+      SecurityGroupIngress:
+        - IpProtocol: '-1'
+          UserIdGroupPairs:
+           - UserId: '661572124387'
+              GroupId: 'sg-14c90b0c'
+      SecurityGroupEgress: 
+        - IpProtocol: '-1'
+          IpRanges: 
+            - CidrIp: '0.0.0.0/0'
+
+
+  ## Additional resources as needed
+
+Outputs:
+  VPCId:
+    Value: {Ref: DefaultVPC}
+    Emport:
+      Name: VPCIdExport
+      Value: {Ref: DefaultVPC}
