@@ -1,0 +1,170 @@
+AWSTemplateFormatEversion: '2010-09-09'
+Description: 'CloudFormation template for iam resources'
+Parameters: {}
+Resources:
+  IEAWRoleAwsReservedSSOAdministratorAccess:
+    Type: "IAM Role"
+    Properties:
+      RoleName: "AWSReservedSSO_AdministratorAccess_8c6e0becc28113da"
+      Path: "/aws-reserved/sso.amazonaws.com/"
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Federated: arn:aws:iam::661572124387:saml-provider/AWSSSO_a32bdadd0844903d_DO_NOT_DELETE"
+            Action: 
+              - sts:AssumeRoleWithSAML
+              - sts:TagSession
+            Condition:
+              StringEquals:
+                SAML:aud: "https://signin.aws.amazonaws.com/saml"
+      MaxSessionDuration: 43200
+  AWSServiceRoleForAPIGateway:
+    Type: "IAM Role"
+    Properties:
+      RoleName: "AWSServiceRoleForAPIGateway"
+      Path: "/aws-service-role/ops.apigateway.amazonaws.com/"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal: 
+              Service: "ops.apigateway.amazonaws.com"
+            Action: "sts:AssumeRole"
+      MaxSessionDuration: 3600
+  AWSServiceRoleForOrganizations:
+    Type: "IAM role"
+    Properties:
+      RoleName: "AWSServiceRoleForOrganizations"
+      Path: "/aws-service-role/organizations.amazonaws.com/"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Service: "organizations.amazonaws.com"
+            Action: "sts:AssumeRole"
+      MaxSessionDuration: 3600
+  AWSServiceRoleForResourceExplorer:
+    Type: "IAM Role"
+    Properties:
+      RoleName: "AWSServiceRoleForResourceExplorer"
+      Path: "/aws-service-role/resource-explorer-2.amazonaws.com/"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Service: "resource-explorer-2.amazonaws.com"
+            Action: "sts:AssumeRole"
+      MaxSessionDuration: 3600
+  AwsRoleForSSO
+    Type: "IAM Role"
+    Properties:
+      RoleName: "AWSReservedSSO_SSO_JE23E"
+      Path: "/aws-service-role/sso.amazonaws.com/"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Service: "sso.amazonaws.com"
+            Action: "sts:AssumeRole"
+      MaxSessionDuration: 3600
+  AWSServiceRoleForSupport:
+    Type: "IAM Role"
+    Properties:
+      RoleName: "AWSServiceRoleForSupport"
+      Path: "/aws-service-role/support.amazonaws.com/"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Service: "support.amazonaws.com"
+            Action: "sts:AssumeRole"
+      MaxSessionDuration: 3600
+  AwsRoleForTrustedAdvisor:
+    Type: "IAM Role"
+    Properties:
+      RoleName: "AWSReservedRoleForTrustedAdvisor"
+      Path: "/aws-service-role/trustedadvisor.amazonaws.com/"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Service: "trustedadvisor.amazonaws.com"
+            Action: "sts:AssumeRole"
+      MaxSessionDuration: 3600
+  DzangoRestPetClinicLambdaExecutionRole:
+    Type: "IAM role"
+    Properties:
+      RoleName: "django-rest-pet-clinic-lambda-execution-role-dev"
+      Path: "/"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Service: "lambda.amazonaws.com"
+            Action: "sts:AssumeRole"
+      MaxSessionDuration: 3600
+  ProductionAccountAccessRole:
+    Type: "IAM role"
+    Properties:
+      RoleName: "ProductionAccountAccessRole"
+      Path: "/"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              AWS::arn:aws:iam::827509883359:root"
+            Action: "sts:AssumeRole"
+      MaxSessionDuration: 3600
+  SomeCrossRole:
+    Type: "IAM Role"
+    Properties:
+      RoleName: "some-cross-role"
+      Path: "/"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            AWS::arn:aws:iam::827509883359:root"
+            Action: "sts:AssumeRole"
+      MaxSessionDuration: 3600
+  someCrossPolicy:
+    Type: "IAM CustomPolicy"
+    Properties:
+      PolicyName: "some-cross-policy"
+      Path: "/"
+      Arn: "arn:aws:iam::661572124387:policy/some-cross-policy"
+      DefaultVersionId: "v1"
+      IsAttachable: true
+      CreateDate: "2020-09-17 21:44:12"
+  dvjangoRestPetClinicLambdaLoggingPolicy:
+    Type: "IAM CustomPolicy"
+    Properties:
+      PolicyName: "django-rest-pet-clinic-lambda-logging-policy-dev"
+      Path: "/"
+      Arn: "arn:aws:iam::661572124387:policy/django-rest-pet-clinic-lambda-logging-policy-dev"
+      DefaultVersionId: "v1"
+      IsAttachable: true
+      CreateDate: "2025-11-19 22:03:47"
+  djangoRestPetClinicLambdaDunamodBPolicy:
+    Type: "IAM CustomPolicy"
+    Properties:
+      PolicyName: "django-rest-pet-clinic-lambda-dynamodb-policy-dev"
+      Path: "/"
+      Arn: "arn:aws:iam::661572124387:policy/django-rest-pet-clinic-lambda-dynamodb-policy-dev"
+      DefaultVersionId: "v1"
+      IsAttachable: true
+      CreateDate: "2025-11-19 22:03:47"
+Outputs:
+  ExportedIamRoleArn:
+    Value: "arn:aws:iam::661572124387:role/AWSReservedSSO_AdministratorAccess_8c6e0becc28113da"
+    EngineeringBuildInfo:
+    Value: "arn:aws:iam::661572124387:role/django-rest-pet-clinic-lambda-execution-role-dev"
+    ExportSomeCrossPolicyArn:
+    Value: "arn:aws:iam::661572124387:policy/some-cross-policy"
+    ExportDjangoLoggingPolicyArn:
+    Value: "arn:aws:iam::661572124387:policy/django-rest-pet-clinic-lambda-logging-policy-dev"
+    ExportDjangoDynamodbPolicyArn:
+    Value: "arn:aws:iam::661572124387:policy/django-rest-pet-clinic-lambda-dynamodb-policy-dev"
