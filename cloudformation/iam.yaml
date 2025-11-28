@@ -1,0 +1,12 @@
+Resources:
+  IamUser:
+    Type: "Aws:Iam:User"
+    Properties: 
+      Path: "iam-template-user"
+      LoginProfileName: "iam-template-profile"
+  IamPolicy:
+    Type: "Aws:Iam:Policy"
+    Properties:
+      PolicyName: "iam-template-policy"
+      PolicyDocument: "Basic IAM policy for template demo."
+Version: "2010-09-09"
