@@ -1,0 +1,109 @@
+AWSTemplateFormatEversion: '2010-09-09'
+Description: 'CloudFormation template for iam resources'
+
+Parameters:
+
+Resources:
+	 IamRole1:
+    Type: "AwsIamRole"
+    Properties:
+      RoleName: "AWSReservedSSO_AdministratorAccess_8c6e0becc28113da"
+      Path: "/aws-reserved/sso.amazonaws.com/"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+                Federated: "arn:aws:iam::661572124387:root/sso.amazonaws.com/AWSSSO_a32bdadd0844903d_DO_NOT_DELETE"
+            Action: 
+                - "sts:AssumeRoleWithSAML"
+                - "sts:TagSession"
+            Condition:
+              StringEquals:
+                SAML:aud: "https://signin.aws.amazon.com/saml"
+      MaxSessionDuration: 43200
+  IamRole2:
+    Type: "AwsIamRole"
+    Properties:
+      RoleName: "AWSServiceRoleForAPEGateway"
+      Path: "/aws-service-role/ops.apigateway.amazonaws.com/"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+                Service: "ops.apigateway.amazonaws.com"
+            Action: "sts:AssumeRole"
+      MaxSessionDuration: 3600
+    Description: "The Service Linked Role is used by Amazon API Gateway."
+  IamRole3:
+    Type: "AwsIamRole"
+    Properties:
+      RoleName: "AWSServiceRoleForOrganizations"
+      Path: "/aws-service-role/organizations.amazonaws.com/"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+                Service: "organizations.amazonaws.com"
+            Action: "sts:AssumeRole"
+      MaxSessionDuration: 3600
+      Description: "Service-linked role used by AWS Organizations to enable integration of other AWS services with Organizations."
+  IamRole4:
+    Type: "AwsIamRole"
+    Properties:
+      RoleName: "AWSServiceRoleForResourceExplorer"
+      Path: "/aws-service-role/resource-explorer-2.amazonaws.com/"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+                Service: "resource-explorer-2.amazonaws.com"
+            Action: "sts:AssumeRole"
+      MaxSessionDuration: 3600
+  IamRole5: 
+    Type: "AwsIamRole"
+    Properties:
+      RoleName: "AWSServiceRoleForSSO"
+      Path: "/aws-service-role/sso.amazonaws.com/"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Service: "sso.amazonaws.com"
+            Action: "sts:AssumeRole"
+      MaxSessionDuration: 3600
+      Description: "Service-linked role used by AWS CSO to manage AWS resources, including IAM roles, policies and SAML IdP on your behalf."
+  IamRole6: 
+    Type: "AwsIamRole"
+    Properties:
+      RoleName: "AWSServiceRoleForSupport"
+      Path: "/aws-service-role/support.amazonaws.com/"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Service: "support.amazonaws.com"
+            Action: "sts:AssumeRole"
+      MaxSessionDuration: 3600
+      Description: "Enables resource access for AWS to provide billing, administrative and support services"
+  Keys: 
+    Type: "AwsIamRole"
+    Properties:
+      RoleName: "AWSServiceRoleForTrustedAdvisor"
+      Path: "/aws-service-role/trustedadvisor.amazonaws.com/"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Service: "trustedadvisor.amazonaws.com"
+            Action: "sts:AssumeRole"
+      MaxSessionDuration: 3600
+      Description: "Access for the AWS Trusted Advisor Service to help reduce cost, increase performance, and improve security of your AWS resources."
+
+Outputs:
+	 IamRoleArns:
+    Description: "Arns of all IAM roles in this stack"
+    Value: !{Join ['arn:aws:iam::661572124387:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_AdministratorAccess_8c6e0becc28113da', 'arn:aws:iam::661572124387:role/aws-service-role/ops.apigateway.amazonaws.com/AWSServiceRoleForAPEGateway', 'arn:aws:iam::661572124387:role/aws-service-role/organizations.amazonaws.com/AWSServiceRoleForOrganizations', 'arn:aws:iam::661572124387:role/aws-service-role/resource-explorer-2.amazonaws.com/AWSServiceRoleForResourceExplorer', 'arn:aws:iam::661572124387:role/aws-service-role/sso.amazonaws.com/AWSServiceRoleForSSO', 'arn:aws:iam::661572124387:role/aws-service-role/support.amazonaws.com/AWSServiceRoleForSupport', 'arn:aws:iam::661572124387:role/aws-service-role/trustedadvisor.amazonaws.com/AWSServiceRoleForTrustedAdvisor'], ',
