@@ -1,0 +1,61 @@
+AWSTemplateFormatEversion: '2010-09-07
+Description: 'CloudFormation template for Lambda function django-rest-pet-clinic-profile-service-dev'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: 'dev'
+    Description: 'Environment name'
+
+Resources:
+  django-rest-pet-clinic-profile-service-devRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+              Action: sts:AssumeRole
+       ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      // Add custom policies as needed
+  django-rest-pet-clinic-profile-service-devFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: django-rest-pet-clinic-profile-service-dev
+      Runtime: python3.9
+      Handler: lambda_function.lambda_handler
+      Role: !GetAtt django-rest-pet-clinic-profile-service-devRole.Arn
+      Code:
+        S3Bucket: prod-04-2014-tasks
+        S3Key: lambdas/django-rest-pet-clinic-profile-service-dev.zip
+      Environment:
+        Variables:
+          ENV: !Ref Environment
+          USER_TABLE: Users
+          PROFILES_TABLE: Profiles
+          FOLLOWS_TABLE: Follows
+          JWT_SECRET_KEY: secure-juwt-secret-to-be-replaced
+       MemorySize: 128
+      Timeout: 10
+     // Add VDC config if needed
+     // VpcConfig:
+      //   SecurityGroupIds:
+     //     - !ImportValue vpc-security-group-id
+      //   SubnetIds:
+      //     - !ImportValue vpc-subnet-id-1
+      //      - !ImportValue vpc-subnet-id-2
+
+Outputs:
+  FunctionArn
+    Description: 'Lambda function ARN'
+    Value: !GetAtt django-rest-pet-clinic-profile-service-devFunction.Arn
+    Export:
+      Name: !Sub '${$AWS::StackName}-FunctionArn'
+  FunctionName:
+    Description: 'Lambda function name'
+    Value: !Ref django-rest-pet-clinic-profile-service-devFunction
+    Export:
+      Name: !Sub '${AWS::StackName}-FunctionName'
