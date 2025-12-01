@@ -1,0 +1,30 @@
+AWSTemplateFormatEversion: '2010-09-09
+Description: 'CloudFormation template for ApiGateway resources'
+
+Parameters:
+  # Add parameters for cross-stack references if needed
+
+Resources:
+  ApiGatewayRestAPIPet:
+    Type: 'AWS-APIGateway-RestAPI"
+    Properties: 
+      Name: 'pet-clinic-api'
+      ApiId: 'alhym2wvq2'
+      Description: 'API Gateway for Django REST Pet Clinic'
+      EndpointConfiguration:
+        Types: ['REGIONAL']
+        IpAddressType: 'ipv4'
+      DisableExecuteApiEndpoint: false
+      RootResourceId: '6c4g9lazul'
+
+Outputs:
+  APIGatewayRestAPIName:
+    Description: 'Rest API Name export'
+    Value: 'pet-clinic-api'
+    Export:
+      Name: !Sub '$AWS::StackName-ApiGatewayRestAPIName'
+  APIGatewayRestAPID: 
+    Description: 'Rest API id export'
+    Value: 'alhym2wvq2'
+    Export:
+      Name: !Sub '$AWS::StackName-ApiGatewayRestAPIId'
