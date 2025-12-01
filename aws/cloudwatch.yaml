@@ -1,0 +1,23 @@
+AWSTemplateFormatEventVersion: '2010-09-09'
+description: 'CloudFormation template for cloudwatch resources'
+
+Resources:
+  LogGroup1:
+    Type: 'AWS/LOGS/LogGroup'
+    Properties:
+      LogGroupName: '/aws/lambda/django-rest-pet-clinic-article-service-dev'
+    Arn: 'arn:aws:logs:us-east-1:661572124387:log-group//aws/lambda/django-rest-pet-clinic-article-service-dev:'
+  LogGroup2:
+    Type:"AWS/LOGS/LogGroup"
+    Properties:
+      LogGroupName: '/aws/lambda/django-rest-pet-clinic-tag-service-dev'
+      Arn: 'arn:aws:logs:us-east-1:661572124387:log-group//aws/lambda/django-rest-pet-clinic-tag-service-dev:'
+
+
+# Outputs exporting log group names for cross-stack reference
+Outputs:
+  LogGroupNames:
+    Description: "List of CloudWatch Log Group names"
+    Value: !Join ['/aws/lambda/django-rest-pet-clinic-article-service-dev', '/aws/lambda/django-rest-pet-clinic-authentication-service-dev', '/aws/lambda/django-rest-pet-clinic-tag-service-dev']
+    Export:
+      Name: !Sub '${AWS::StackName}-LogGroupNames'
