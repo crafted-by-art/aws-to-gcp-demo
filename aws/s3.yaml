@@ -1,0 +1,19 @@
+AWSTemplateFormatEversion: '2010-09-09'
+Description: 'CloudFormation template for S3 resources'
+
+Resources:
+  S3BucketCftemplates:
+    Type: "Aws:S;Bucket"
+    Properties:
+      BucketName: "cf-templates-msyienxlfxzy5-us-east-1"
+  SSBucketDjangoLambeDeployments:
+    Type: "Aws:S;Bucket"
+    Properties:
+      BucketName: "django-rest-pet-clinic-lambda-deployments-dev-661572124387"
+
+Outputs:
+  S3BucketNames:
+    Description: "List of S3 bucket names"
+    Value: !Join [',cf-templates-msyienxlfxzy5-us-east-1,django-rest-pet-clinic-lambda-deployments-dev-661572124387']
+    Export:
+      Name: !Sub '${AWS::StackName}-SBBucketNames'
