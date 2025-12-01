@@ -1,0 +1,98 @@
+AWSTemplateFormatEversion: '2010-09-09'
+Description: 'CloudFormation template for vpc resources'
+
+Parameters:
+
+Resources:
+
+  Vpc:
+    Type: 'AWS-EC2:Vpc'
+    Properties:
+      CidrBlock: '172.31.0.0/16'
+      InstanceTenancy: 'default'
+      DhcpOptionsId: 'dopt-cdb288b7
+      IsDefault: true
+
+  SubnetArns:
+    Type: "AWS-EC2:Subnet"
+    Properties:
+      VpcId: !{Ref Vpc.ResourceId}
+      CidrBlock: '172.31.32.0/20'
+      AvailabilityZone: 'us-east-1a'
+      DefaultForAz: true
+
+  SubnetBravo:
+    Type: "AWS-EC2:Subnet"
+    Properties:
+      VpcId: ${Ref Vpc.ResourceId}
+      CidrBlock: '172.31.0.0/20'
+      AvailabilityZone: 'us-east-1b'
+      DefaultForAz: true
+
+  SubnetBad49f9:
+    Type: "AWS-EC2:Subnet"
+    Properties:
+      VpcId: ${Ref Vpc.ResourceId}
+      CidrBlock: '172.31.80.0/20'
+      AvailabilityZone: 'us-east-1c'
+      DefaultForAz: true
+
+  Subnet19495554:
+    Type: "AWS-EC2:Subnet"
+    Properties:
+      VpcId: ${Ref Vpc.ResourceId}
+      CidrBlock: '172.31.16.0/20'
+      AvailabilityZone: 'us-east-1d'
+      DefaultForAz: true
+
+  Subnetee0191df:
+    Type: "AWS-EC2:Subnet"
+    Properties:
+      VpcId: ${Ref Vpc.ResourceId}
+      CidrBlock: '172.31.48.0/20'
+      AvailabilityZone: 'us-east-1e'
+      DefaultForAz: true
+
+  Subnetee7797fe9:
+    Type: "AWS-EC2:Subnet"
+    Properties:
+      VpcId: ${Ref Vpc.ResourceId}
+      CidrBlock: '172.31.64.0/20'
+      AvailabilityZone: 'us-east-1f'
+      DefaultForAz: true
+
+
+  RoutTablef57f9b84
+    Type: "AWS-EC2:RouteTable"
+    Properties:
+      VpcId: ${Ref Vpc.ResourceId}
+      Routes:
+        - DestinationCidrBlock: '172.31.0.0/16'
+          GatewayId: local
+        - DestinationCidrBlock: '0.0.0.0/0'
+          GatewayId: igw-b8529ec2
+
+  InternetGatewayBn652nec2
+    Type: "AWS-EC2:InternetGateway"
+    Properties:
+      InternetGatewayId: "igw-b8529ec2"
+      Attachments:
+        - VpcId: "vpc-bebe27c3"
+
+  SecurityGroupSg14c90b0c:
+    Type: "AWS-EC2:SecurityGroup"
+    Properties:
+      VpcId: $vpc-bebe27c3
+      GroupName: "default"
+      Description: "default VPC security group"
+
+
+  ## No NAT NatGateways found
+
+
+Outputs:
+  VpcId:
+    Description: "Vpc Id"
+    Value: { Ref: Vpc ResourceId }
+    Export:
+      Name: !Sub ${AWS::StackName}-VpcId
