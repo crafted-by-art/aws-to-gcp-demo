@@ -1,0 +1,1 @@
+{"services": ["iam", "vpc", "s3", "lambda", "dynamodb", "cloudwatch", "apigateway"], "total": 7}
