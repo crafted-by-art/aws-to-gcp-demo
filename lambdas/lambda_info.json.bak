@@ -1,0 +1,93 @@
+[
+    {
+        "lambda_name": "AuthenticationService",
+        "component_root_dir": "/Users/Aleksandr_Polishchuk/Desktop/projects/DjangoRESTPetClinic/airun/lambdas/AuthenticationService",
+        "language": "Python",
+        "description": "Handles user registration, login, and user information updates",
+        "endpoint_uri": "/api/users",
+        "build_sequence": [
+            "mkdir package",
+            "pip install -r requirements.txt -t package",
+            "cd package && zip -r ../AuthenticationService.zip .",
+            "zip AuthenticationService.zip lambda_function.py"
+        ]
+    },
+    {
+        "lambda_name": "ProfileService",
+        "component_root_dir": "/Users/Aleksandr_Polishchuk/Desktop/projects/DjangoRESTPetClinic/airun/lambdas/ProfileService",
+        "language": "Python",
+        "description": "Handles profile retrieval and follow/unfollow operations for users",
+        "endpoint_uri": "/api/profiles",
+        "build_sequence": [
+            "mkdir package",
+            "pip install -r requirements.txt -t package",
+            "cd package && zip -r ../ProfileService.zip .",
+            "zip ProfileService.zip lambda_function.py"
+        ]
+    },
+    {
+        "lambda_name": "ArticleService",
+        "component_root_dir": "/Users/Aleksandr_Polishchuk/Desktop/projects/DjangoRESTPetClinic/airun/lambdas/ArticleService",
+        "language": "Python",
+        "description": "Handles article creation, retrieval, updating and listing",
+        "endpoint_uri": "/api/articles",
+        "build_sequence": [
+            "mkdir package",
+            "pip install -r requirements.txt -t package",
+            "cd package && zip -r ../ArticleService.zip .",
+            "zip ArticleService.zip lambda_function.py"
+        ]
+    },
+    {
+        "lambda_name": "CommentService",
+        "component_root_dir": "/Users/Aleksandr_Polishchuk/Desktop/projects/DjangoRESTPetClinic/airun/lambdas/CommentService",
+        "language": "Python",
+        "description": "Manages article comments including creation, listing and deletion",
+        "endpoint_uri": "/api/articles/{slug}/comments",
+        "build_sequence": [
+            "mkdir package",
+            "pip install -r requirements.txt -t package",
+            "cd package && zip -r ../CommentService.zip .",
+            "zip CommentService.zip lambda_function.py"
+        ]
+    },
+    {
+        "lambda_name": "TagService",
+        "component_root_dir": "/Users/Aleksandr_Polishchuk/Desktop/projects/DjangoRESTPetClinic/airun/lambdas/TagService",
+        "language": "Python",
+        "description": "Provides a list of all article tags in the system",
+        "endpoint_uri": "/api/tags",
+        "build_sequence": [
+            "mkdir package",
+            "pip install -r requirements.txt -t package",
+            "cd package && zip -r ../TagService.zip .",
+            "zip TagService.zip lambda_function.py"
+        ]
+    },
+    {
+        "lambda_name": "ArticleFavoriteService",
+        "component_root_dir": "/Users/Aleksandr_Polishchuk/Desktop/projects/DjangoRESTPetClinic/airun/lambdas/ArticleFavoriteService",
+        "language": "Python",
+        "description": "Manages favoriting and unfavoriting articles by users",
+        "endpoint_uri": "/api/articles/{slug}/favorite",
+        "build_sequence": [
+            "mkdir package",
+            "pip install -r requirements.txt -t package",
+            "cd package && zip -r ../ArticleFavoriteService.zip .",
+            "zip ArticleFavoriteService.zip lambda_function.py"
+        ]
+    },
+    {
+        "lambda_name": "ArticleFeedService",
+        "component_root_dir": "/Users/Aleksandr_Polishchuk/Desktop/projects/DjangoRESTPetClinic/airun/lambdas/ArticleFeedService",
+        "language": "Python",
+        "description": "Provides personalized article feed for authenticated users based on their following list",
+        "endpoint_uri": "/api/articles/feed",
+        "build_sequence": [
+            "mkdir package",
+            "pip install -r requirements.txt -t package",
+            "cd package && zip -r ../ArticleFeedService.zip .",
+            "zip ArticleFeedService.zip lambda_function.py"
+        ]
+    }
+]

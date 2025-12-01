@@ -1,0 +1,51 @@
+[
+    {
+        "lambda_name": "AuthenticationService",
+        "lambda_archive_path": "/Users/Aleksandr_Polishchuk/Desktop/projects/DjangoRESTPetClinic/airun/lambdas/archives/AuthenticationService.zip",
+        "description": "Handles user registration, login, and user information updates",
+        "endpoint_uri": "/api/users",
+        "success": true
+    },
+    {
+        "lambda_name": "ProfileService",
+        "lambda_archive_path": "/Users/Aleksandr_Polishchuk/Desktop/projects/DjangoRESTPetClinic/airun/lambdas/archives/ProfileService.zip",
+        "description": "Handles profile retrieval and follow/unfollow operations for users",
+        "endpoint_uri": "/api/profiles",
+        "success": true
+    },
+    {
+        "lambda_name": "ArticleService",
+        "lambda_archive_path": "/Users/Aleksandr_Polishchuk/Desktop/projects/DjangoRESTPetClinic/airun/lambdas/archives/ArticleService.zip",
+        "description": "Handles article creation, retrieval, updating and listing",
+        "endpoint_uri": "/api/articles",
+        "success": true
+    },
+    {
+        "lambda_name": "CommentService",
+        "lambda_archive_path": "/Users/Aleksandr_Polishchuk/Desktop/projects/DjangoRESTPetClinic/airun/lambdas/archives/CommentService.zip",
+        "description": "Manages article comments including creation, listing and deletion",
+        "endpoint_uri": "/api/articles/{slug}/comments",
+        "success": true
+    },
+    {
+        "lambda_name": "TagService",
+        "lambda_archive_path": "/Users/Aleksandr_Polishchuk/Desktop/projects/DjangoRESTPetClinic/airun/lambdas/archives/TagService.zip",
+        "description": "Provides a list of all article tags in the system",
+        "endpoint_uri": "/api/tags",
+        "success": true
+    },
+    {
+        "lambda_name": "ArticleFavoriteService",
+        "lambda_archive_path": "/Users/Aleksandr_Polishchuk/Desktop/projects/DjangoRESTPetClinic/airun/lambdas/archives/ArticleFavoriteService.zip",
+        "description": "Manages favoriting and unfavoriting articles by users",
+        "endpoint_uri": "/api/articles/{slug}/favorite",
+        "success": true
+    },
+    {
+        "lambda_name": "ArticleFeedService",
+        "lambda_archive_path": "/Users/Aleksandr_Polishchuk/Desktop/projects/DjangoRESTPetClinic/airun/lambdas/archives/ArticleFeedService.zip",
+        "description": "Provides personalized article feed for authenticated users based on their following list",
+        "endpoint_uri": "/api/articles/feed",
+        "success": true
+    }
+]
