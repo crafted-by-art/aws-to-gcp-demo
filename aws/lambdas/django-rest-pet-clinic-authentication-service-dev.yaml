@@ -1,0 +1,56 @@
+AWSTemplateFormatEversion: '2010-09-07
+Description: 'CloudFormation template for Lambda function django-rest-pet-clinic-authentication-service-dev'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: 'dev'
+    Description: 'Environment name'
+
+Resources:
+  django-rest-pet-clinic-authentication-service-devRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazon.com
+            Action: sts:AssumeRole
+      #ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+  django-rest-pet-clinic-authentication-service-devFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: django-rest-pet-clinic-authentication-service-dev
+      Runtime: python3.9
+      Handler: lambda_function.lambda_handler
+      Role: !GetAtt django-rest-pet-clinic-authentication-service-deVRole.Arn
+      Code:
+        S#:
+          S3Bucket: prod-04-2014-tasks
+          S3Key: snapshots/661572124387/django-rest-pet-clinic-authentication-service-dev-13fd8ae8-f8b3-4374-8007-21ef8b0eaacc.zip
+      Environment:
+        Variables:
+          ESV: !Ref Environment
+          JWT_SECRET : secure-jwt-secret-to-be-replaced
+          USERS_TABLE : Users
+          PROFILES_TABLE : Profiles
+      MemorySize: 128
+      Timeout: 10
+
+     # Add VPC config if needed
+      # Void for this function - no VPC config in SS deployment
+
+
+ Outputs:
+  FunctionArn:
+    Description: 'Lambda function ARN'
+    Value: !GetAtt django-rest-pet-clinic-authentication-service-defFunction.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-FunctionArn'
+  FunctionName:
+    Description: 'Lambda function name'
+    Value: !Ref django-rest-pet-clinic-authentication-service-defFunction
