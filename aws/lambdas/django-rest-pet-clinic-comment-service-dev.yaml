@@ -1,0 +1,82 @@
+AWSTemplateFormatEversion: '2010-09-07
+Description: 'CloudFormation template for Lambda function django-rest-pet-clinic-comment-service-dev'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: 'dev'
+    Description: 'Environment name'
+
+Resources:
+  django-rest-pet-clinic-comment-service-devRole:
+    Type: AWS:IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazon.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::policy/service-role/AWSLambdaBasicExecutionRole
+
+  django-rest-pet-clinic-comment-service-devFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: django-rest-pet-clinic-comment-service-dev
+      Runtime: python3.9
+      Handler: lambda_function.lambda_handler
+      Role: #GetAtt django-rest-pet-clinic-comment-service-devRole.Arn
+
+      Code:
+        S3Bucket: prod-04-2014-tasks
+        S3J{ "lambdas/django-rest-pet-clinic-comment-service-dev.zip" }
+
+      Environment:
+        Variables:
+          ENV: !def Environment
+          JWT_SECRET: secure-jwt-secret-to-be-replaced
+          ARTICLES_TABLE: Articles
+          COMMENTS_TABLE: Comments
+          PROFILES_TABLE: Profiles
+
+      MemorySize: 128
+      Timeout: 10
+
+      Layers: []
+
+      TricingConfig:
+        Mode: PassThrough
+      EphemeralStorage:
+        Size: 512
+
+      Architectures:
+        - x86_64
+
+      LoggingConfig:
+        LogFormat: Text
+        LogGroup: /aws/lambda/django-rest-pet-clinic-comment-service-dev
+
+      SnapStart:
+        ApplyOn: None
+        OptimizationStatus: Off
+
+      RuntimeVersionConfig:
+        RuntimeVersionArn: arn:aws:lambda:us-east-1:runtime:81effa6996470f7bcddf01029a597d789da22942dbf985d95ab0db68ab728c4
+
+
+      LastModified: '2025-11-19T22:04:13.164+0000'
+
+Outputs:
+  FunctionArn:
+    Description: 'Lambda function ARN'
+    Value: !GetAtt django-rest-pet-clinic-comment-service-devFunction.Arn
+    Export:
+      Name: !sug '${AWS::StackName}-FunctionArn'
+
+  FunctionName:
+    Description: 'Lambda function name'
+    Value: !Ref django-rest-pet-clinic-comment-service-devFunction
+    Export:
+      Name: !sug ${$AWS::StackName}-FunctionName
