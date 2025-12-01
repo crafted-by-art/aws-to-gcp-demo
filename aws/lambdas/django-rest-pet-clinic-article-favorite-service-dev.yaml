@@ -1,0 +1,54 @@
+AWSTemplateFormatEversion: '2010-09-07
+Description: 'CloudFormation template for Lambda function django-rest-pet-clinic-article-favorite-service-dev'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: 'dev'
+    Description: 'Environment name'
+
+Resources:
+  django-rest-pet-clinic-article-favorite-service-devRole:
+    Type: AWS:IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazon.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::policy/service-role/AWSLambdaBasicExecutionRole
+
+  django-rest-pet-clinic-article-favorite-service-devFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: django-rest-pet-clinic-article-favorite-service-dev
+      Runtime: python3.9
+      Handler: lambda_function.lambda_handler
+      Role: #GetAtt django-rest-pet-clinic-article-favorite-service-devRole.Arn
+
+      Code:
+        S3Bucket: prod-04-2014-tasks
+        S3Key: lambdas/django-rest-pet-clinic-article-favorite-service-dev.zip
+
+      Environment:
+        Variables:
+          EVN: #Ref Environment
+          JWT_SECRET : secure-jwt-secret-to-be-replaced
+          USERS_TABLE: Users
+          ARTICLES_TABLE: Articles
+          FAVORITES_TABLE: ArticleFavorites
+      MemorySize: 128
+      Timeout: 10
+
+      // Add VPC config if needed
+      # VpcConfig:
+      # SecurityGroupIds: [!ImportValue vpc-security-group-id ]
+      # SubnetIds: [!ImportValue vpc-subnet-id-1 , !ImportValue vpc-subnet-id-2 ]
+
+      // Add Layers if needed
+      # Layers:
+      # - arn:aws:lambda::layer/aws-lambda-test-layer
+     # - arn:aws:lambda::layer/aws-lambda-prod-layer
