@@ -1,0 +1,282 @@
+# Cloud Functions Configuration
+# Storage Bucket Objects - Upload local ZIPs to Cloud Storage
+# Equivalent to AWS Lambda functions
+
+# Enable required APIs
+resource "google_project_service" "cloudfunctions" {
+  service            = "cloudfunctions.googleapis.com"
+  disable_on_destroy = false
+}
+
+resource "google_project_service" "cloudbuild" {
+  service            = "cloudbuild.googleapis.com"
+  disable_on_destroy = false
+}
+
+resource "google_project_service" "run" {
+  service            = "run.googleapis.com"
+  disable_on_destroy = false
+}
+
+# Create placeholder ZIP files directory
+# Note: Actual function code will be migrated later
+
+# Authentication Service Cloud Function
+resource "google_cloudfunctions2_function" "authentication_service" {
+  name        = "authentication-service"
+  location    = var.region
+  description = "User authentication, registration, and profile updates"
+
+  build_config {
+    runtime     = "python39"
+    entry_point = "main"
+    source {
+      storage_source {
+        bucket = google_storage_bucket.function_deployments.name
+        object = google_storage_bucket_object.authentication_service_zip.name
+      }
+    }
+  }
+
+  service_config {
+    max_instance_count    = 100
+    min_instance_count    = 0
+    available_memory      = "256M"
+    timeout_seconds       = 60
+    service_account_email = google_service_account.cloud_function_sa.email
+
+    environment_variables = {
+      JWT_SECRET          = var.jwt_secret
+      FIRESTORE_DB        = "(default)"
+      USERS_COLLECTION    = "Users"
+      PROFILES_COLLECTION = "Profiles"
+    }
+  }
+
+  labels = {
+    environment = var.environment
+    project     = var.project_name
+    managed_by  = "terraform"
+  }
+
+  depends_on = [
+    google_project_service.cloudfunctions,
+    google_project_service.cloudbuild,
+    google_project_service.run
+  ]
+}
+
+# Article Service Cloud Function
+resource "google_cloudfunctions2_function" "article_service" {
+  name        = "article-service"
+  location    = var.region
+  description = "Article CRUD operations"
+
+  build_config {
+    runtime     = "python39"
+    entry_point = "main"
+    source {
+      storage_source {
+        bucket = google_storage_bucket.function_deployments.name
+        object = google_storage_bucket_object.article_service_zip.name
+      }
+    }
+  }
+
+  service_config {
+    max_instance_count    = 100
+    available_memory      = "256M"
+    timeout_seconds       = 60
+    service_account_email = google_service_account.cloud_function_sa.email
+
+    environment_variables = {
+      JWT_SECRET          = var.jwt_secret
+      ARTICLES_COLLECTION = "Articles"
+      TAGS_COLLECTION     = "Tags"
+      PROFILES_COLLECTION = "Profiles"
+    }
+  }
+
+  labels = {
+    environment = var.environment
+    project     = var.project_name
+  }
+
+  depends_on = [
+    google_project_service.cloudfunctions,
+    google_project_service.cloudbuild
+  ]
+}
+
+# Article Feed Service
+resource "google_cloudfunctions2_function" "article_feed_service" {
+  name        = "article-feed-service"
+  location    = var.region
+  description = "Personalized article feed"
+
+  build_config {
+    runtime     = "python39"
+    entry_point = "main"
+    source {
+      storage_source {
+        bucket = google_storage_bucket.function_deployments.name
+        object = google_storage_bucket_object.article_feed_service_zip.name
+      }
+    }
+  }
+
+  service_config {
+    max_instance_count    = 100
+    available_memory      = "256M"
+    timeout_seconds       = 60
+    service_account_email = google_service_account.cloud_function_sa.email
+    environment_variables = {
+      JWT_SECRET          = var.jwt_secret
+      ARTICLES_COLLECTION = "Articles"
+      FOLLOWS_COLLECTION  = "Follows"
+    }
+  }
+
+  labels = {
+    environment = var.environment
+    project     = var.project_name
+  }
+}
+
+# Article Favorite Service
+resource "google_cloudfunctions2_function" "article_favorite_service" {
+  name        = "article-favorite-service"
+  location    = var.region
+  description = "Favorite/unfavorite articles"
+
+  build_config {
+    runtime     = "python39"
+    entry_point = "main"
+    source {
+      storage_source {
+        bucket = google_storage_bucket.function_deployments.name
+        object = google_storage_bucket_object.article_favorite_service_zip.name
+      }
+    }
+  }
+
+  service_config {
+    max_instance_count    = 100
+    available_memory      = "256M"
+    timeout_seconds       = 60
+    service_account_email = google_service_account.cloud_function_sa.email
+    environment_variables = {
+      JWT_SECRET           = var.jwt_secret
+      FAVORITES_COLLECTION = "ArticleFavorites"
+      ARTICLES_COLLECTION  = "Articles"
+    }
+  }
+
+  labels = {
+    environment = var.environment
+    project     = var.project_name
+  }
+}
+
+# Comment Service
+resource "google_cloudfunctions2_function" "comment_service" {
+  name        = "comment-service"
+  location    = var.region
+  description = "Comment management"
+
+  build_config {
+    runtime     = "python39"
+    entry_point = "main"
+    source {
+      storage_source {
+        bucket = google_storage_bucket.function_deployments.name
+        object = google_storage_bucket_object.comment_service_zip.name
+      }
+    }
+  }
+
+  service_config {
+    max_instance_count    = 100
+    available_memory      = "256M"
+    timeout_seconds       = 60
+    service_account_email = google_service_account.cloud_function_sa.email
+    environment_variables = {
+      JWT_SECRET          = var.jwt_secret
+      COMMENTS_COLLECTION = "Comments"
+      ARTICLES_COLLECTION = "Articles"
+    }
+  }
+
+  labels = {
+    environment = var.environment
+    project     = var.project_name
+  }
+}
+
+# Profile Service
+resource "google_cloudfunctions2_function" "profile_service" {
+  name        = "profile-service"
+  location    = var.region
+  description = "Profile and follow/unfollow operations"
+
+  build_config {
+    runtime     = "python39"
+    entry_point = "main"
+    source {
+      storage_source {
+        bucket = google_storage_bucket.function_deployments.name
+        object = google_storage_bucket_object.profile_service_zip.name
+      }
+    }
+  }
+
+  service_config {
+    max_instance_count    = 100
+    available_memory      = "256M"
+    timeout_seconds       = 60
+    service_account_email = google_service_account.cloud_function_sa.email
+    environment_variables = {
+      JWT_SECRET          = var.jwt_secret
+      PROFILES_COLLECTION = "Profiles"
+      FOLLOWS_COLLECTION  = "Follows"
+    }
+  }
+
+  labels = {
+    environment = var.environment
+    project     = var.project_name
+  }
+}
+
+# Tag Service
+resource "google_cloudfunctions2_function" "tag_service" {
+  name        = "tag-service"
+  location    = var.region
+  description = "Tag listing"
+
+  build_config {
+    runtime     = "python39"
+    entry_point = "main"
+    source {
+      storage_source {
+        bucket = google_storage_bucket.function_deployments.name
+        object = google_storage_bucket_object.tag_service_zip.name
+      }
+    }
+  }
+
+  service_config {
+    max_instance_count    = 100
+    available_memory      = "256M"
+    timeout_seconds       = 60
+    service_account_email = google_service_account.cloud_function_sa.email
+    environment_variables = {
+      TAGS_COLLECTION = "Tags"
+    }
+  }
+
+  labels = {
+    environment = var.environment
+    project     = var.project_name
+  }
+}

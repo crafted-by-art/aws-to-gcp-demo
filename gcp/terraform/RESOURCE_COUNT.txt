@@ -1,0 +1,50 @@
+GCP Terraform Resources Summary
+================================
+
+File: provider.tf
+- Providers: 2 (google, archive)
+
+File: variables.tf
+- Variables: 6
+
+File: firestore.tf
+- google_project_service: 1
+- google_firestore_database: 1
+- google_firestore_index: 9
+Total: 11 resources
+
+File: storage.tf
+- google_project_service: 1
+- google_storage_bucket: 3 (deployments, logs, backups)
+Total: 4 resources
+
+File: iam.tf
+- google_service_account: 1
+- google_project_iam_member: 5
+Total: 6 resources
+
+File: functions.tf
+- google_project_service: 3
+- google_cloudfunctions2_function: 7
+Total: 10 resources
+
+File: api_gateway.tf
+- google_project_service: 3
+- google_api_gateway_api: 1
+Total: 4 resources
+
+File: logging.tf
+- google_project_service: 1
+- google_logging_project_sink: 1
+- google_storage_bucket_iam_member: 1
+Total: 3 resources
+
+File: outputs.tf
+- Outputs: 4
+
+GRAND TOTAL
+===========
+Resources: 38 GCP resources
+Variables: 6
+Outputs: 4
+Lines of Code: 720

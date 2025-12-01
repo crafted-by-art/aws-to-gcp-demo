@@ -1,0 +1,189 @@
+import json
+import os
+import time
+import uuid
+import re
+from datetime import datetime, timedelta
+from typing import Optional, Dict, List, Any
+import jwt
+from google.cloud import firestore
+import functions_framework
+from flask import Request
+
+# Initialize Firestore client
+db = firestore.Client()
+
+# Collections
+ARTICLES_COLLECTION = 'articles'
+TAGS_COLLECTION = 'tags'
+PROFILES_COLLECTION = 'profiles'
+COMMENTS_COLLECTION = 'comments'
+
+# JWT Configuration
+JWT_SECRET = os.environ.get('JWT_SECRET', 'secret')
+JWT_ALGORITHM = 'HS256'
+JWT_EXP_DELTA_SECONDS = 86400  # 24 hours
+
+# Pagination defaults
+DEFAULT_LIMIT = 20
+DEFAULT_OFFSET = 0
+
+
+def generate_slug(title: str) -> str:
+    """Generate a URL-friendly slug from a title."""
+    slug = re.sub(r'[^\w\s-]', '', title.lower())
+    slug = re.sub(r'[-\s]+', '-', slug).strip('-')
+    unique_suffix = str(int(time.time()))
+    return f"{slug}-{unique_suffix}"
+
+
+def extract_token(headers: Dict[str, str]) -> Optional[str]:
+    """Extract the JWT token from request headers."""
+    auth_header = headers.get('Authorization', headers.get('authorization', ''))
+    if auth_header.startswith('Token '):
+        return auth_header.split(' ')[1]
+    return None
+
+
+def decode_token(token: str) -> Optional[Dict[str, Any]]:
+    """Decode the JWT token and return the user information."""
+    if not token:
+        return None
+    
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        return payload
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.InvalidTokenError:
+        return None
+
+
+def get_user_from_token(headers: Dict[str, str]) -> Optional[Dict[str, Any]]:
+    """Get user profile from the JWT token in headers."""
+    token = extract_token(headers)
+    if not token:
+        return None
+    
+    payload = decode_token(token)
+    if not payload:
+        return None
+    
+    user_id = payload.get('id')
+    if not user_id:
+        return None
+    
+    try:
+        profile_ref = db.collection(PROFILES_COLLECTION).document(user_id)
+        profile_doc = profile_ref.get()
+        
+        if profile_doc.exists:
+            profile_data = profile_doc.to_dict()
+            profile_data['user_id'] = profile_doc.id
+            return profile_data
+        return None
+    except Exception as e:
+        print(f"Error getting user profile: {str(e)}")
+        return None
+
+
+def get_profile_by_username(username: str) -> Optional[Dict[str, Any]]:
+    """Get profile by username from Firestore."""
+    try:
+        profiles_ref = db.collection(PROFILES_COLLECTION)
+        query = profiles_ref.where('username', '==', username).limit(1)
+        docs = query.stream()
+        
+        for doc in docs:
+            profile_data = doc.to_dict()
+            profile_data['user_id'] = doc.id
+            return profile_data
+        return None
+    except Exception as e:
+        print(f"Error getting profile by username: {str(e)}")
+        return None
+
+
+def format_article_response(article: Dict[str, Any], user_profile: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Format article for API response."""
+    try:
+        author_ref = db.collection(PROFILES_COLLECTION).document(article['author_id'])
+        author_doc = author_ref.get()
+        author = author_doc.to_dict() if author_doc.exists else {}
+    except Exception as e:
+        print(f"Error getting author profile: {str(e)}")
+        author = {}
+    
+    author_data = {
+        'username': author.get('username', ''),
+        'bio': author.get('bio', ''),
+        'image': author.get('image', ''),
+        'following': False
+    }
+    
+    if user_profile and 'following' in user_profile:
+        author_data['following'] = article['author_id'] in user_profile.get('following', [])
+    
+    tags = article.get('tag_list', [])
+    favorited = False
+    favorites_count = article.get('favorites_count', 0)
+    
+    if user_profile and 'favorites' in user_profile:
+        favorited = article['slug'] in user_profile.get('favorites', [])
+    
+    created_at = article.get('created_at', datetime.utcnow().isoformat())
+    updated_at = article.get('updated_at', created_at)
+    
+    return {
+        'slug': article['slug'],
+        'title': article['title'],
+        'description': article.get('description', ''),
+        'body': article.get('body', ''),
+        'tagList': tags,
+        'createdAt': created_at,
+        'updatedAt': updated_at,
+        'favorited': favorited,
+        'favoritesCount': favorites_count,
+        'author': author_data
+    }
+
+
+@functions_framework.http
+def article_service(request: Request):
+    """Main entry point for the article service Cloud Function."""
+    # Enable CORS
+    if request.method == 'OPTIONS':
+        headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'Access-Control-Max-Age': '3600'
+        }
+        return ('', 204, headers)
+    
+    # Set CORS headers for the main request
+    headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+    }
+    
+    # Get user profile from token
+    user_profile = get_user_from_token(dict(request.headers))
+    
+    # Extract method and path
+    method = request.method
+    path = request.path
+    
+    # Simple routing - placeholder for full implementation
+    # The complete routing logic would handle all article endpoints
+    # This is a stub to show the pattern
+    
+    try:
+        result = {'message': 'Article service placeholder - full implementation pending'}
+        status = 200
+        
+        return (json.dumps(result), status, headers)
+            
+    except Exception as e:
+        print(f"Unhandled error: {str(e)}")
+        return (json.dumps({'errors': {'body': ['Internal server error']}}), 500, headers)
