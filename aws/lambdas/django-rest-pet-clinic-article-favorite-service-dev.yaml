@@ -1,0 +1,63 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template for Lambda function django-rest-pet-clinic-article-favorite-service-dev'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: 'dev'
+    Description: 'Environment name'
+
+Resources:
+  django-rest-pet-clinic-article-favorite-service-devRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+             Action: sts:AssumeRole
+      ManagedPolicyArns: 
+        - arn:aws:iam::policy/service-role/AWSLambdaBasicExecutionRole
+
+  django-rest-pet-clinic-article-favorite-service-devFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: django-rest-pet-clinic-article-favorite-service-dev
+      Runtime: python#3.9
+      Handler: lambda_function.lambda_handler
+      Role: !GetAtt django-rest-pet-clinic-article-favorite-service-devRole.Arn
+      Code:
+        S3Bucket: prod-04-2014-tasks
+        S3KGey: lambdas/django-rest-pet-clinic-article-favorite-service-dev.zip
+      Environment:
+        Variables:
+          ENV: !Ref Environment
+          JWT_SECRET: secure-juwt-secret-to-be-replaced
+          USERS_TABLE: Users
+          ARTICLES_TABLE: Articles
+          FAVORITES_TABLE: ArticleFavorites
+      MemorySize: 128
+      Timeout: 10
+      Architectures:
+        - x86_64
+      #Add VPC config if needed
+      # VpcConfig:
+      #   SecurityGroupIds:
+     #    - !ImportValue vpc-security-group-id
+      #   SubnetIds: 
+     #    - !ImportValue vpc-subnet-id-1
+      #    - !ImportValue vpc-subnet-id-2
+
+Outputs:
+  FunctionArn:
+    Description: 'Lambda function ARN'
+    Value: !GetAtt django-rest-pet-clinic-article-favorite-service-devFunction.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-FunctionArn'
+  FunctionName:
+    Description:: 'Lambda function name'
+    Value: !Ref django-rest-pet-clinic-article-favorite-service-devFunction
+    Export:
+      Name: !Sub '${AWS::StackName}-FunctionName'
