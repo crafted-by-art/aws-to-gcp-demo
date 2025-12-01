@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template for Lambda function django-rest-pet-clinic-authentication-service-dev'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: 'dev'
+    Description: 'Environment name'
+
+Resources:
+  django-rest-pet-clinic-authentication-service-devRole:
+    Type: AWS:IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns: 
+        - arn:aws:iam::policy/service-role/AWSLambdaBasicExecutionRole
+
+   django-rest-pet-clinic-authentication-service-devFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: django-rest-pet-clinic-authentication-service-dev
+      Runtime: python3.9
+      Handler: lambda_function.lambda_handler
+      Role: #GetAtt django-rest-pet-clinic-authentication-service-devRole.Arn
+      Code:
+        S3Bucket: prod-04-2014-tasks
+        S3KGey: lambdas/django-rest-pet-clinic-authentication-service-dev.zip
+      Environment:
+        Variables:
+          JWT_SECRET: secure-jwt-secret-to-be-replaced
+          USERS_TABLE: Users
+          PROFILES_TABLE: Profiles
+      MemorySize: 128
+      Timeout: 10
+
+      # Voluntary: x866_64
+      # Voluntary: x86_64
+      # Layers: []
+      # Voluntary: x86_64
+      # VPCConfig:
+      # SecurityGroupIds: [
+        #   !ImportValue wrapped if needed
+       # ]
+        # SubnetIds: [
+        #    !ImportValue wrapped if needed
+       # ]
+
