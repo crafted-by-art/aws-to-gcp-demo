@@ -1,0 +1,36 @@
+AWSTemplateFormatEventVersion: '2010-09-09'
+description: 'CloudWatch alarms and log groups'
+
+Parameters: 
+  # Add parameters for cross-stack references if needed
+
+Resources:
+ # CloudWatch alarms will be listed here if found in future
+
+  # Log Groups
+  CloudWatchLogGroup1
+    Type: "AwsLogGroup"
+    Properties: 
+      LogGroupName: "/aws/lambda/django-rest-pet-clinic-article-service-dev"
+      Arn: "arn:aws:logs:us-east-1:661572124387:log-group:/aws/lambda/django-rest-pet-clinic-article-service-dev*"
+  CloudWatchLogGroup2
+    Type: "AwsLogGroup"
+    Properties: 
+      LogGroupName: "/aws/lambda/django-rest-pet-clinic-authentication-service-dev"
+      Arn: "arn:aws:logs:us-east-1:661572124387:log-group:/aws/lambda/django-rest-pet-clinic-authentication-service-dev*"
+  CloudWatchLogGroup3
+    Type: "AwsLogGroup"
+    Properties:
+      LogGroupName: "/aws/lambda/django-rest-pet-clinic-tag-service-dev"
+      Arn: "arn:aws:logs:us-east-1:661572124387:log-group:/aws/lambda/django-rest-pet-clinic-tag-service-dev*"
+
+Outputs:
+  CloudWatchLogGroupArns
+    Description: "Arns of log groups for cross-reference"
+    Value: [
+      "arn:aws:logs:us-east-1:661572124387:log-group:/aws/lambda/django-rest-pet-clinic-article-service-dev*",
+      "arn:aws:logs:us-east-1:661572124387:log-group:/aws/lambda/django-rest-pet-clinic-authentication-service-dev*",
+      "arn:aws:logs:us-east-1:661572124387:log-group:/aws/lambda/django-rest-pet-clinic-tag-service-dev*"
+    ]
+    Export: 
+      Name: !sub '${AWS::StackName}-CloudWatchLogGroupArns'
