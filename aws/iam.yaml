@@ -1,0 +1,89 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template for iam resources'
+
+Resources: 
+   IamRole_AWSReservedSSO_AdministratorAccess8c6e0becc28113da:
+      Type: "AWS::IamRole"
+      Properties:
+        RoleName: "AWSReservedSSO_AdministratorAccess_8c6e0becc28113da"
+        Path: "/aws-reserved/sso.amazonaws.com/"
+      IamRole_AWSServiceRoleForAPIGateway:
+        Type: "AWS:IamRole"
+        Properties:
+          RoleName: "AWSServiceRoleForAPIGateway"
+          Path: "/aws-service-role/ops.apigateway.amazonaws.com/"
+      IamRole_AWSServiceRoleForOrganizations: 
+        Type: "AWS::IamRole"
+        Properties:
+          RoleName: "AWSServiceRoleForOrganizations"
+          Path: "/aws-service-role/organizations.amazonaws.com/"
+      IamRole_AWSServiceRoleForResourceExplorer:
+        Type: "AWS::IamRole"
+        Properties:
+          RoleName: "AWSServiceRoleForResourceExplorer"
+          Path: "/aws-service-role/resource-explorer-2.amazonaws.com/"
+      IamRole_AWSServiceRoleForSSO:
+        Type: "AWS:IamRole"
+        Properties: 
+          RoleName: "AWSServiceRoleForSSO"
+          Path: "/aws-service-role/sso.amazonaws.com/"
+      IamRole_AWSServiceRoleForSupport:
+        Type: "AWS::IamRole"
+        Properties:
+          RoleName: "AWSServiceRoleForSupport"
+          Path: "/aws-service-role/support.amazonaws.com/"
+      IamRole_AWSServiceRoleForTrustedAdvisor:
+        Type: "AWS::IamRole"
+        Properties: 
+          RoleName: "AWSServiceRoleForTrustedAdvisor"
+          Path: "/aws-service-role/trustedadvisor.amazonaws.com/"
+      IamRole_django-rest-pet-clinic-lambda-execution-role-dev:
+        Type: "AWS::IamRole"
+        Properties: 
+          RoleName: "django-rest-pet-clinic-lambda-execution-role-dev"
+          Path: "/"
+      IamRole_ProductionAccountAccessRole:
+        Type: "AWS:IamRole"
+        Properties: 
+          RoleName: "ProductionAccountAccessRole"
+          Path: "/"
+      IamRole_some-cross-role:
+        Type: "AWS:IamRole"
+        Properties: 
+          RoleName: "some-cross-role"
+          Path: "/"
+
+  IamPolicy_some-cross-policy:
+    Type: "AWS:IamPolicy"
+    Properties:
+      PolicyName: "some-cross-policy"
+      Path: "/"
+
+  IamPolicy_django-rest-pet-clinic-lambda-logging-policy-dev:
+    Type: "AWS:IamPolicy"
+    Properties:
+      PolicyName: "django-rest-pet-clinic-lambda-logging-policy-dev"
+      Path: "/"
+
+  IamPolicy_django-rest-pet-clinic-lambda-dynamodb-policy-dev:
+    Type: "AWS:IamPolicy"
+    Properties: 
+      PolicyName: "django-rest-pet-clinic-lambda-dynamodb-policy-dev"
+      Path: "/"
+
+Outputs:
+  ImportantRoles:
+    Description: "List of IAM roles"
+    Value: []
+    Export:
+      Name: !sug ${AWS::StackName}-ImportantRoles
+  ImportantPolicies:
+    Description: "List of IAM policies"
+    Value: []
+    Export:
+      Name: !sug ${AWS::StackName}-ImportantPolicies
+  InstanceProfiles:
+    Description: "List of IAM Instance Profiles"
+    Value: []
+    Export:
+      Name: !sug ${AWS::StackName}-InstanceProfiles
