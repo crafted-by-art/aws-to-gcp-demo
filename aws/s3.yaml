@@ -1,0 +1,19 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template for sc resources'
+
+Resources:
+  SCFtemplateBucket1
+    Type: "AWS::SC::Bucket"
+    Properties:
+      BucketName: "cf-templates-msyiefflfxzy-us-east-1"
+  SCDemoDeploymentBucket
+    Type: "AWS::SC::Bucket"
+    Properties:
+      BucketName: "django-rest-pet-clinic-lambda-deployments-dev-661572124387"
+
+Outputs:
+  ScBucketNames:
+    Description: 'List of SC buckets'
+    Value: !Join ['"cf-templates-msyiefflfxzy-us-east-1", "django-rest-pet-clinic-lambda-deployments-dev-661572124387"]
+    Export:
+      Name: !Sub '${AWS::StackName}-ScBucketNames'
