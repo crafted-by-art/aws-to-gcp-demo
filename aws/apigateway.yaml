@@ -1,0 +1,29 @@
+AWSTemplateFormatEversion: '2010-09-09
+Description: 'CloudFormation template for API Gateway resources'
+
+Parameters: 
+  #Add parameters for cross-stack references if needed
+
+Resources:
+  APIGatewayReStAPIPetClinic:
+    Type: "APRGateway/RestAPI"
+    Properties:
+      Name: "pet-clinic-api"
+      Description: "API Gateway for Dzango REST Pet Clinic"
+      ApiKeySource: "HEADER"
+      EndpointConfiguration:
+        Types:
+          - "REGIONAL"
+        IpAddressType: "ipv4"
+      DisableExecuteApiEndpoint: false
+      RootResourceId: "6c4g9lazul"
+
+
+  #If no resources found, create empty Resources section
+
+Outputs:
+  APIGatewayName:
+    Description: "API Gateway name"
+    Value: "pet-clinic-api"
+    Export:
+      Name: !sub '${AWS::StackName}-APIName'
