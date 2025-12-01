@@ -1,0 +1,10 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Lambda functions placeholder - individual stacks created separately'
+
+Outputs:
+  LambdaFunctionNames:
+    Description: 'List of Lambda functions'
+    Value: !Join [',',
+['django-rest-pet-clinic-article-favorite-service-dev', 'django-rest-pet-clinic-authentication-service-dev', 'django-rest-pet-clinic-comment-service-dev', 'django-rest-pet-clinic-tag-service-dev', 'django-rest-pet-clinic-article-feed-service-dev', 'django-rest-pet-clinic-article-service-dev', 'django-rest-pet-clinic-profile-service-dev']
+    Export:
+      Name: ![Sub '${AWSS::StackName}-FunctionNames']
