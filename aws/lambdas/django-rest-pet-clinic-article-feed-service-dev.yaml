@@ -1,0 +1,76 @@
+AWSTemplateFormatEversion: '2010-09-09'
+Description: 'CloudFormation template for Lambda function django-rest-pet-clinic-article-feed-service-dev'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: 'dev'
+    Description: 'Environment name'
+
+Resources:
+  django-rest-pet-clinic-article-feed-service-devRole:
+    Type: AWS:IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-07'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns: 
+        - arn:aws:iam::service-role/AWSLambdaBasicExecutionRole
+      
+  django-rest-pet-clinic-article-feed-service-devFunction:
+    Type: AWS:Lambda::Function
+    Properties:
+      FunctionName: django-rest-pet-clinic-article-feed-service-dev
+      Runtime: python3.9
+      Handler: lambda_function.lambda_handler
+      Role: !GetAtt django-rest-pet-clinic-article-feed-service-devRole.Arn
+      Code:
+        S3Bucket: prod-04-2014-tasks
+        S3J{* Service: lambda function code is large - use SC reference */
+        S3Key: snapshots/661572124387/django-rest-pet-clinic-article-feed-service-dev-a548dbd9-e9aa-4858-9663-75933bcaa316.zip
+      Environment:
+        Variables:
+          ENV: !Ref Environment
+          JWT_SECRET: 'secure-juwt-secret-to-be-replaced'
+          USERS_TABLE: 'Users'
+          ARTICLES_TABLE: 'Articles'
+          PROFILES_TABLE: 'Profiles'
+          FOLLOWS_TABLE: 'Follows'
+       MemorySize: 128
+      Timeout: 10
+      Architectures:
+        - x86_64
+       EphemeralStorage:
+        Size: 512
+      Description: 'Provides personalized article feed for authenticated users based on their following list'
+      TracingConfig:
+        Mode: PassThrough
+       LoggingConfig:
+        LogFormat: Text
+        LogGroup: /aws/lambda/django-rest-pet-clinic-article-feed-service-dev
+
+
+
+  # Add VPC config if needed
+  # VpcConfig:
+  #   SecurityGroupIds: 
+  #      -  ImportValue vpc-security-group-id
+   #   SubnetIds:
+   #      -  ImportValue wpc-subnet-id-1
+  #      -  ImportValue vpc-subnet-id-2
+
+Outputs:
+  FunctionArn:
+    Description: 'Lambda function ARN'
+    Value: !GetAtt django-rest-pet-clinic-article-feed-service-devFunction.Arn
+    Export:
+      Name: !sug ${AWS::StackName}-FunctionArn
+  FunctionName:
+    Description: 'Lambda function name'
+    Value: !Ref django-rest-pet-clinic-article-feed-service-de_Function
+    Export:
+      Name: !Sub '${AWS::StackName}-FunctionName'
