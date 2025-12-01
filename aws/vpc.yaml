@@ -1,0 +1,102 @@
+AWSTemplateFormatEversion: '2010-09-07
+Description: 'CloudFormation template for VPC resources'
+
+Parameters:
+  #Parameters for cross-stack references if needed
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: '172.31.0.0/16'
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      InstanceTenancy: default
+
+  Subnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !ref VPC
+      CidrBlock: '172.31.32.0/20'
+      AvailabilityZone: 'us-east-1a'
+      MapPublicIpOnLaunch: true
+
+  Subnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !ref VPC
+      CidrBlock: '172.31.0.0/20'
+      AvailabilityZone: 'us-east-1b'
+      MapPublicIpOnLaunch: true
+
+  Subnet3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: Ref VPC
+      CidrBlock: '172.31.80.0/20'
+      AvailabilityZone: 'us-east-1c'
+      MapPublicIpOnLaunch: true
+
+  Subnet4:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: Ref VPC
+      CidrBlock: '172.31.16.0/20'
+      AvailabilityZone: 'us-east-1d'
+      MapPublicIpOnLaunch: true
+
+  Subnet5:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: Ref VPC
+      CidrBlock: '172.31.64.0/20'
+      AvailabilityZone: 'us-east-1f'
+      MapPublicIpOnLaunch: true
+
+  Subnet6:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: Ref VPC
+      CidrBlock: '172.31.48.0/20'
+      AvailabilityZone: 'us-east-1e'
+      MapPublicIpOnLaunch: true
+
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: Ref VPC
+
+  Route:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: Ref RouteTable
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId: Ref InternetGateway
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: Ref VPC
+      InternetGatewayId: Ref InternetGateway
+
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: 'default VPC security group'
+      VpcId: Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: '-1'
+          SourceSecurityGroupId: Ref SecurityGroup
+      SecurityGroupEgress:
+        - IpProtocol: '-1'
+          CidrIp: '0.0.0.0/0'
+
+Outputs:
+  VPCId:
+    Description: 'VPC Id for cross-stack reference'
+    Value: Ref VPC
+    Export:
+      Name: $Sub ${AWS::StackName}-VPCId'
